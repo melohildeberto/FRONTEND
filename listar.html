@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Curso WEB Treina</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+
+    <div class="p-5 bg-primary text-white text-center">
+      <h1>Curso Web Treina Recife</h1>
+      <p>HTML, CSS, Java Script</p>
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="cadastro.html">Cadastro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="listar.html">Listar</a>
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      
+      <div class="row">
+        <form action="processamentos.php" method="post">
+          <div class="row">
+             <div class="mb-3 mt-3 col">
+                <label class="form-label" for="nome">ID:</label>
+                <input type="text" id="idpesquisa" name="idpesquisa"
+                   size="100" placeholder=""
+                   class="form-control" onblur="">
+             </div>
+          </div>
+          <div class="mb-3 mt-3">
+             <input type="button" id="btn1" value="Pesquisar" class="btn
+                btn-primary" onclick="listarApiExterna(); ">
+          </div>
+       </form>
+
+       <div class="row" id="divcards">
+       
+        
+      </div>
+        <div class="col-sm-12" id="divresultadoapi" style="height: 300px; overflow-y: scroll;">
+           
+          <table id="" name=""  class="table">
+             <tr>
+              <th>ID</th>
+              <th>Matricula</th>
+              <th>Nome</th>
+              <th>Gênero</th>
+              <th>...</th>
+             </tr>
+             
+          </table>
+        </div>
+        
+      </div>
+    </div>
+    <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="titulo-mensagem">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="corpo-mensagem">
+            <form action="processamentos.php" method="post">
+              <div class="row">
+                <div class="mb-3 mt-3 col">
+                  <label class="form-label">Matricula:</label>
+                  <input class="form-control" type="text" id="matricula"
+                     name="matricula" onblur="">
+               </div>
+                 <div class="mb-3 mt-3 col">
+                    <label class="form-label" for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome"
+                       size="100" placeholder="Informe o nome"
+                       class="form-control" onblur="">
+                 </div>
+                
+                 <div class="mb-3 mt-3 col">
+                    <label class="form-label">Salário:</label>
+                    <input type="text" class="form-control" id="salario"
+                       name="salario" value="">
+                 </div>
+              </div>
+              
+              <div class="mb-3 mt-3">
+                 <input type="reset" value="Limpar" class="btn
+                    btn-warning">
+                 <input type="button" id="btn1" value="Enviar" class="btn
+                    btn-primary" onclick="cadastrarDados(); ">
+              </div>
+           </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!--<button type="button" class="btn btn-primary">Understood</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--MODAL ESPERA-->
+    <div class="modal " id="modalEspera" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="titulo-mensagem">Aguarde</h5>
+          </div>
+          <div class="modal-body" id="corpo-mensagem">
+            <div class="d-flex justify-content-center ">
+              <div class="spinner-border" role="status"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FIM MODAL ESPERA-->
+    <script>
+      
+      /*function listarProfessores(){
+            //document.getElementById("demo").innerHTML ='';
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                const dados = JSON.parse(this.responseText);
+                var tabela = '<table id="" name=""  class="table">';
+                tabela = tabela + '<tr>';
+                tabela = tabela + '<th>Matricula</th>';
+                tabela = tabela + '<th>Nome</th>';
+                tabela = tabela + '<th>Salário</th>';
+                tabela = tabela + '</tr>';
+                //imprimir os dados na tabela
+                for (let index = 0; index < dados.professores.length; index++) {
+                  const prof = dados.professores[index];
+                  tabela = tabela + '<tr>';
+                  tabela = tabela + '<td>'+ prof.matricula+'</td>';
+                  tabela = tabela + '<td>'+ prof.nome+'</td>';
+                  tabela = tabela + '<td>'+ prof.salario+'</td>';
+                  tabela = tabela + '</tr>';
+                }
+                tabela = tabela + '</table>';
+                document.getElementById("divresultadoapi").innerHTML = tabela
+            }
+            xhttp.open("get", "http://localhost/apirestphp/aluno/api.php");
+            //xhttp.open("get", "https://gorest.co.in/public/v2/posts");
+            xhttp.setRequestHeader("Content-Type", "application/text");
+            xhttp.send();
+        }*/
+
+        function listarApiExterna(){
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                //alert("terminou")
+              }
+            };
+            xhttp.onload = function() {
+                const dados = JSON.parse(this.responseText);
+
+                var cards = '';
+                
+                
+                var tabela = '<table id="" name=""  class="table">';
+                tabela = tabela + '<tr>';
+                tabela = tabela + '<th>ID</th>';
+                tabela = tabela + '<th>Matricula</th>';
+                tabela = tabela + '<th>Nome</th>';
+                tabela = tabela + '<th>Salario</th>';
+                tabela = tabela + '<th>...</th>';
+                tabela = tabela + '</tr>';
+                if(dados.message != null){
+                  fecharModalEspera();
+                  alert(dados.message);
+                  return;
+                }
+
+                if (dados.length > 0) {
+                  //imprimir os dados na tabela
+                  for (let index = 0; index < dados.length; index++) {
+                    const prof = dados[index];
+                    tabela = tabela + '<tr>';
+                    tabela = tabela + '<td>'+ prof.id+'</td>';
+                    tabela = tabela + '<td>'+ prof.matricula+'</td>';
+                    tabela = tabela + '<td>'+ prof.nome+'</td>';
+                    tabela = tabela + '<td>'+ prof.salario+'</td>';
+                    tabela = tabela + '<td><input type="button" id="btn1" value="Editar" class="btn btn-warning" onclick="editarDados('+ prof.id+'); "></td>';
+                    tabela = tabela + '</tr>';
+
+                    cards = cards + '<div class="card col-4">';
+                    cards = cards + '<div class="card-header">'+prof.nome+'</div>';
+                    cards = cards + '<div class="card-body">'+ prof.matricula +'</div>'; 
+                    cards = cards + '<div class="card-footer">'+ prof.salario+'</div>';
+                    cards = cards + '</div>'
+                  }
+                }else{
+                    tabela = tabela + '<tr>';
+                    tabela = tabela + '<td>'+ dados.id+'</td>';
+                    tabela = tabela + '<td>'+ dados.matricula+'</td>';
+                    tabela = tabela + '<td>'+ dados.nome+'</td>';
+                    tabela = tabela + '<td>'+ dados.salario+'</td>';
+                    tabela = tabela + '</tr>';
+                }
+                tabela = tabela + '</table>';
+                document.getElementById("divresultadoapi").innerHTML = tabela
+                document.getElementById("divcards").innerHTML = cards
+                
+                fecharModalEspera();
+            };
+            let id = document.getElementById("idpesquisa").value;
+            let url = "http://localhost:8082/professor/listar";
+            xhttp.open("get", url);
+            xhttp.setRequestHeader("Content-Type", "application/text");
+            abrirModalEspera();
+            xhttp.send();
+        }
+        function editarDados(id){
+          const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                const dados = JSON.parse(this.responseText);
+                fecharModalEspera();
+                if(dados.message != null){
+                  alert(dados.message);
+                  return;
+                }else{
+                  document.getElementById("nome").value = dados.professor.nome;
+                  document.getElementById("matricula").value = dados.professor.matricula;
+                  document.getElementById("salario").value = dados.professor.salario;
+                  abrirModal("Editar Usuário", "");
+                }
+            }
+            
+            let url = "http://localhost:8082/professor/get/"+id;
+            xhttp.open("get", url);
+            xhttp.setRequestHeader("Content-Type", "application/text");
+            abrirModalEspera();
+            xhttp.send();
+        }
+
+        function cadastrarDados(){
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+              const dados = JSON.parse(this.responseText);
+              if(dados.mensagem != null){
+                  alert(dados.mensagem[0]);
+                  return;
+              }else if(dados.length > 0){
+                alert(this.responseText);
+              }else{
+                  //alert(dados.id);
+              }
+            }
+            xhttp.open("POST", "http://localhost:8082/professor/cadastrar");
+            xhttp.setRequestHeader("Accept","application/json")
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.setRequestHeader('Authorization', 'Bearer 20224c192f812aa1dc8946a72f7d9465cec21b64017ad3187a22f62399773a8b');
+            xhttp.send(
+              JSON.stringify(
+                {
+                  id: 0,
+                  matricula: document.getElementById("matricula").value,
+                  nome: document.getElementById("nome").value,
+                  salario: document.getElementById("salario").value
+                }
+              )
+            );
+        }
+        
+        function abrirModal(titulo, mensagem){
+            var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+                keyboard: false
+            });
+            document.getElementById('titulo-mensagem').innerHTML = titulo;
+            myModal.show()
+        }
+        var modalEspera;
+        modalEspera = new bootstrap.Modal(document.getElementById('modalEspera'), {
+                keyboard: false
+            });
+        function abrirModalEspera(){
+            modalEspera.show()
+        }
+        function fecharModalEspera(){
+          modalEspera.hide();
+        }
+    </script>
+  </body>
+</html>
